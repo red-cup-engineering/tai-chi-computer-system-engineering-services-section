@@ -1,0 +1,12 @@
+{
+  "recordType": "tai-chi-skeletal-trace-manifest",
+  "schemaVersion": "1.0.0",
+  "traceId": "synthetic-trace-001",
+  "createdAt": "2026-08-19T12:00:00Z",
+  "sensitivity": { "classification": "sensitive-personal-movement-data", "shareAuthorization": "local-only" },
+  "mediaRetention": { "containsRawImage": true, "containsRawVideo": false, "containsRawAudio": false, "containsSegmentationMask": false, "containsAppearanceEmbedding": false, "rawMediaRetention": "none" },
+  "provenance": { "estimatorName": "synthetic-fixture-generator", "estimatorVersion": "1.0.0", "adapterVersion": "1.0.0", "projectionVersion": "1.0.0" },
+  "jointSetProfile": { "id": "synthetic-body-17", "version": "1.0.0" },
+  "coordinateSpaceProfile": { "id": "synthetic-image-2d", "version": "1.0.0", "dimensions": 2, "normalization": "image-normalized" },
+  "frames": { "format": "ndjson", "frameSchemaId": "urn:red-cup-science:tai-chi:skeletal-trace-frame:1.0.0", "path": "2026/08/19/synthetic-trace-001.ndjson" }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@red-cup-engineering/tai-chi-computer-system-services-section",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Personal health computer system for Tai Chi curricula, portable practitioner state, skeletal observations, and later teacher interaction.",
+  "exports": {
+    "./tai-chi-practice-computer": "./scripts/tai-chi-practice-computer.mjs"
+  },
+  "dependencies": {
+    "@red-cup-engineering/json-schema-services-section": "workspace:*",
+    "@red-cup-engineering/json-services-section": "workspace:*"
+  },
+  "scripts": {
+    "test": "node --test test/**/*.test.mjs"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "recordType": "tai-chi-practice-session",
+  "schemaVersion": "1.0.0",
+  "sessionId": "synthetic-session-001",
+  "startedAt": "2026-08-19T12:00:00Z",
+  "endedAt": "2026-08-19T12:01:00Z",
+  "sensitivity": { "classification": "sensitive-personal-practice-data" },
+  "mediaRetention": { "containsRawImage": false, "containsRawVideo": false, "containsRawAudio": false, "rawMediaRetention": "none" },
+  "curriculumReferences": [{ "id": "synthetic-lineage:opening", "version": "1.0.0" }],
+  "traceReferences": [{ "traceId": "synthetic-trace-001", "manifestPath": "2026/08/19/synthetic-trace-001.manifest.json" }]
+}

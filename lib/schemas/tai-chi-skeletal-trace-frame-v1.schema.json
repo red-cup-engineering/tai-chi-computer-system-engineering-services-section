@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:red-cup-science:tai-chi:skeletal-trace-frame:1.0.0",
+  "title": "Tai Chi skeletal trace frame v1",
+  "description": "One normalized pose-estimator observation in an NDJSON skeletal trace. It contains no raw media or detector-native landmark array.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recordType", "schemaVersion", "traceId", "elapsedTimeMs", "joints"],
+  "properties": {
+    "recordType": { "const": "tai-chi-skeletal-trace-frame" },
+    "schemaVersion": { "const": "1.0.0" },
+    "traceId": { "$ref": "#/$defs/identifier" },
+    "elapsedTimeMs": { "type": "integer", "minimum": 0 },
+    "joints": {
+      "type": "object",
+      "description": "Keys are stable canonical joint vocabulary identifiers declared by the trace manifest's joint-set profile. Omitted keys are unobserved joints, not inferred coordinates.",
+      "propertyNames": { "$ref": "#/$defs/jointIdentifier" },
+      "additionalProperties": { "$ref": "#/$defs/jointObservation" }
+    }
+  },
+  "$defs": {
+    "identifier": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+    "jointIdentifier": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+    "unitInterval": { "type": "number", "minimum": 0, "maximum": 1 },
+    "jointObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["position", "confidence"],
+      "properties": {
+        "position": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["x", "y"],
+              "properties": {
+                "x": { "type": "number" },
+                "y": { "type": "number" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["x", "y", "z"],
+              "properties": {
+                "x": { "type": "number" },
+                "y": { "type": "number" },
+                "z": { "type": "number" }
+              }
+            }
+          ]
+        },
+        "confidence": { "$ref": "#/$defs/unitInterval" },
+        "visibility": { "$ref": "#/$defs/unitInterval" },
+        "presence": { "$ref": "#/$defs/unitInterval" }
+      }
+    }
+  }
+}

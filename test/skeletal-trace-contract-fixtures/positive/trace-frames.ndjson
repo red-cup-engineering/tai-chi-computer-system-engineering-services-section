@@ -1,0 +1,2 @@
+{"recordType":"tai-chi-skeletal-trace-frame","schemaVersion":"1.0.0","traceId":"synthetic-trace-001","elapsedTimeMs":0,"joints":{"left-hip":{"position":{"x":0.4,"y":0.6},"confidence":0.9},"right-hip":{"position":{"x":0.6,"y":0.6},"confidence":0.91}}}
+{"recordType":"tai-chi-skeletal-trace-frame","schemaVersion":"1.0.0","traceId":"synthetic-trace-001","elapsedTimeMs":120,"joints":{"left-hip":{"position":{"x":0.41,"y":0.59},"confidence":0.89},"right-hip":{"position":{"x":0.61,"y":0.59},"confidence":0.9}}}
