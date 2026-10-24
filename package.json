@@ -1,5 +1,5 @@
 {
-  "name": "@red-cup-engineering/tai-chi-computer-system-services-section",
+  "name": "@red-cup-engineering/tai-chi-computer-system-engineering-services-section",
   "version": "0.1.0",
   "type": "module",
   "description": "Personal health computer system for Tai Chi curricula, portable practitioner state, skeletal observations, and later teacher interaction.",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/red-cup-engineering/tai-chi-computer-system-services-section.git"
+    "url": "git+https://github.com/red-cup-engineering/tai-chi-computer-system-engineering-services-section.git"
   },
   "license": "MIT",
   "funding": {
