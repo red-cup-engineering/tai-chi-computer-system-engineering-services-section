@@ -16,7 +16,7 @@ and the upstream [science and system architecture](../../../../../../../../../..
 before adding application behavior.
 
 Durable practitioner records live in the [personal Tai Chi state
-section](../../../../../../../../../../../public-services-section/services/personal-services-section/services/emsenn-services-section/services/emsenn-medical-services-section/services/health-services-section/services/emsenn-fitness-services-section/services/public-emsenn-martial-arts-services-section/services/public-emsenn-tai-chi-services-section/),
+section](../../../../../../../../../../../public-services-section/services/personal-services-section/services/emsenn-services-section/services/emsenn-medical-services-section/services/health-services-section/services/public-emsenn-fitness-services-section/services/public-emsenn-martial-arts-services-section/services/public-emsenn-tai-chi-services-section/),
 not in this computer system.
 
 ## Admitted applications
@@ -39,7 +39,7 @@ and the upstream [science and system architecture](../../../../../../../../../..
 before adding application behavior.
 
 Durable practitioner records live in the [personal Tai Chi state
-section](../../../../../../../../../../../public-services-section/services/personal-services-section/services/emsenn-services-section/services/emsenn-medical-services-section/services/health-services-section/services/emsenn-fitness-services-section/services/public-emsenn-martial-arts-services-section/services/public-emsenn-tai-chi-services-section/),
+section](../../../../../../../../../../../public-services-section/services/personal-services-section/services/emsenn-services-section/services/emsenn-medical-services-section/services/health-services-section/services/public-emsenn-fitness-services-section/services/public-emsenn-martial-arts-services-section/services/public-emsenn-tai-chi-services-section/),
 not in this computer system.
 
 ## Admitted applications

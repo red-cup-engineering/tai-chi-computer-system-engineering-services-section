@@ -12,7 +12,7 @@ authors:
 
 ## Admission
 
-The `tai-chi-computer-system-services-section` is admitted as a child of the
+The `tai-chi-computer-system-engineering-services-section` is admitted as a child of the
 personal health computer systems engineering services section. Its distinct
 responsibility is to compose a personal computer system through which a
 practitioner works with shared Tai Chi scientific resources,
