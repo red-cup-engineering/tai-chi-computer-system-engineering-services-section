@@ -1,6 +1,6 @@
 /** Pure conformance over caller-supplied, parsed portable-practice records. */
 
-import { isObjectRecord } from "@red-cup-engineering/json-services-section";
+import { isObjectRecord } from "@red-cup-engineering/json-engineering-services-section";
 
 export const RECORD_TYPES = Object.freeze({
   session: "tai-chi-practice-session",
