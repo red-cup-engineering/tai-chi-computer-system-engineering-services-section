@@ -1,0 +1,22 @@
+{
+  "name": "@red-cup-engineering/tai-chi-computer-system-engineering-services-section",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Personal health computer system for Tai Chi curricula, portable practitioner state, skeletal observations, and later teacher interaction.",
+  "exports": {
+    "./tai-chi-practice-computer": "./scripts/tai-chi-practice-computer.mjs"
+  },
+  "dependencies": {
+    "@red-cup-engineering/json-schema-engineering-services-section": "^0.5.4",
+    "@red-cup-engineering/json-engine": "^0.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/red-cup-engineering/tai-chi-computer-system-engineering-services-section.git"
+  },
+  "license": "MIT",
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/561-group/.github/blob/main/TIPS.md"
+  }
+}
