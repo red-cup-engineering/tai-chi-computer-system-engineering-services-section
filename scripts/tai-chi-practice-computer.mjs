@@ -1,3 +1,4 @@
+
 import { isRecord } from "@red-cup-engineering/signcell/values";
 /** Pure conformance over caller-supplied, parsed portable-practice records. */
 
@@ -45,16 +46,16 @@ const RAW_MEDIA_FIELD_NAMES = new Set([
  */
 export function validatePracticeBundle(input) {
   const diagnostics = [];
-  if (!isPlainObject(input)) return result([diagnostic("INPUT_NOT_OBJECT", "error", "$", "Input must be an object.")]);
+  if (!isRecord(input)) return result([diagnostic("INPUT_NOT_OBJECT", "error", "$", "Input must be an object.")]);
   const { records, schemaValidator, schemaCorpus } = input;
   if (!Array.isArray(records)) diagnostics.push(diagnostic("RECORDS_NOT_ARRAY", "error", "$.records", "Records must be a caller-supplied array."));
-  if (!isPlainObject(schemaValidator) || typeof schemaValidator.validate !== "function") diagnostics.push(diagnostic("SCHEMA_VALIDATOR_PORT_REQUIRED", "error", "$.schemaValidator", "A schemaValidator.validate port is required; this computer neither chooses nor loads a validator."));
+  if (!isRecord(schemaValidator) || typeof schemaValidator.validate !== "function") diagnostics.push(diagnostic("SCHEMA_VALIDATOR_PORT_REQUIRED", "error", "$.schemaValidator", "A schemaValidator.validate port is required; this computer neither chooses nor loads a validator."));
   if (diagnostics.length) return result(diagnostics);
 
   const recordsByPath = new Map();
   for (let index = 0; index < records.length; index += 1) {
     const record = records[index]; const location = `$.records[${index}]`;
-    if (!isPlainObject(record)) { diagnostics.push(diagnostic("RECORD_NOT_OBJECT", "error", location, "Each record must be an object.")); continue; }
+    if (!isRecord(record)) { diagnostics.push(diagnostic("RECORD_NOT_OBJECT", "error", location, "Each record must be an object.")); continue; }
     if (!isBundlePath(record.path)) { diagnostics.push(diagnostic("RECORD_PATH_INVALID", "error", `${location}.path`, "Record path must be a non-empty, bundle-relative POSIX path.")); continue; }
     if (!Object.values(RECORD_TYPES).includes(record.type)) { diagnostics.push(diagnostic("RECORD_TYPE_UNKNOWN", "error", `${location}.type`, "Record type is not admitted by this conformance slice.", { type: record.type })); continue; }
     if (recordsByPath.has(record.path)) { diagnostics.push(diagnostic("RECORD_PATH_DUPLICATE", "error", `${location}.path`, "Bundle paths must identify exactly one record.", { path: record.path })); continue; }
@@ -78,16 +79,16 @@ function validateViaPort(schemaValidator, schemaCorpus, record, location, diagno
     let response;
     try { response = schemaValidator.validate({ schemaId: SCHEMA_IDS[record.type], instance, schemaCorpus }); }
     catch (error) { diagnostics.push(diagnostic("SCHEMA_VALIDATOR_PORT_FAILED", "error", instanceLocation, "The supplied schema validator threw while validating this record.", { recordPath: record.path, reason: String(error?.message ?? error) })); continue; }
-    if (!isPlainObject(response) || typeof response.valid !== "boolean") { diagnostics.push(diagnostic("SCHEMA_VALIDATOR_PORT_PROTOCOL_INVALID", "error", instanceLocation, "Schema validator must return { valid: boolean, diagnostics?: Array }.", { recordPath: record.path })); continue; }
+    if (!isRecord(response) || typeof response.valid !== "boolean") { diagnostics.push(diagnostic("SCHEMA_VALIDATOR_PORT_PROTOCOL_INVALID", "error", instanceLocation, "Schema validator must return { valid: boolean, diagnostics?: Array }.", { recordPath: record.path })); continue; }
     if (!response.valid) for (const schemaDiagnostic of Array.isArray(response.diagnostics) && response.diagnostics.length ? response.diagnostics : [{}]) diagnostics.push(diagnostic("SCHEMA_INVALID", "error", instanceLocation, "Record does not conform to its declared science schema.", { recordPath: record.path, schemaId: SCHEMA_IDS[record.type], schemaDiagnostic }));
   }
 }
 
 function validateManifest(record, recordsByPath, diagnostics) {
   const value = record.value;
-  if (!isPlainObject(value)) return;
+  if (!isRecord(value)) return;
   const retention = value.mediaRetention;
-  if (!isPlainObject(retention)) diagnostics.push(diagnostic("MEDIA_RETENTION_UNDECLARED", "error", `${record.path}.mediaRetention`, "A trace manifest must declare nested mediaRetention."));
+  if (!isRecord(retention)) diagnostics.push(diagnostic("MEDIA_RETENTION_UNDECLARED", "error", `${record.path}.mediaRetention`, "A trace manifest must declare nested mediaRetention."));
   else for (const [field, expected] of Object.entries(REQUIRED_MANIFEST_MEDIA_RETENTION)) if (retention[field] !== expected) diagnostics.push(diagnostic("RAW_MEDIA_AFFIRMATION_MISSING_OR_FALSE", "error", `${record.path}.mediaRetention.${field}`, "A trace manifest must make the required raw-media refusal affirmation.", { expected, actual: retention[field] }));
   if (!isVersionedProfile(value.jointSetProfile)) diagnostics.push(diagnostic("TRACE_PROFILE_UNDECLARED", "error", `${record.path}.jointSetProfile`, "A trace manifest must declare a versioned joint-set profile."));
   if (!isCoordinateProfile(value.coordinateSpaceProfile)) diagnostics.push(diagnostic("TRACE_COORDINATE_PROFILE_INVALID", "error", `${record.path}.coordinateSpaceProfile`, "A trace manifest must declare a 2D or 3D versioned coordinate-space profile."));
@@ -97,7 +98,7 @@ function validateManifest(record, recordsByPath, diagnostics) {
 
 function validateSession(record, recordsByPath, diagnostics) {
   const retention = record.value?.mediaRetention;
-  if (!isPlainObject(retention)) diagnostics.push(diagnostic("MEDIA_RETENTION_UNDECLARED", "error", `${record.path}.mediaRetention`, "A practice session must declare nested mediaRetention."));
+  if (!isRecord(retention)) diagnostics.push(diagnostic("MEDIA_RETENTION_UNDECLARED", "error", `${record.path}.mediaRetention`, "A practice session must declare nested mediaRetention."));
   else for (const [field, expected] of Object.entries(REQUIRED_SESSION_MEDIA_RETENTION)) if (retention[field] !== expected) diagnostics.push(diagnostic("RAW_MEDIA_AFFIRMATION_MISSING_OR_FALSE", "error", `${record.path}.mediaRetention.${field}`, "A practice session must make the required raw-media refusal affirmation.", { expected, actual: retention[field] }));
   const references = record.value?.traceReferences;
   if (!Array.isArray(references)) { diagnostics.push(diagnostic("TRACE_REFERENCES_UNDECLARED", "error", `${record.path}.traceReferences`, "A practice session must declare its trace references.")); return; }
@@ -118,7 +119,7 @@ function validateFrameStream(record, recordsByPath, diagnostics) {
   let previousElapsedTimeMs = -1;
   for (let index = 0; index < frames.length; index += 1) {
     const frame = frames[index]; const location = `${record.path}[${index}]`;
-    if (!isPlainObject(frame) || !Number.isInteger(frame.elapsedTimeMs) || frame.elapsedTimeMs < 0) { diagnostics.push(diagnostic("FRAME_TIME_INVALID", "error", location, "Each frame must provide a non-negative integer elapsedTimeMs value.")); continue; }
+    if (!isRecord(frame) || !Number.isInteger(frame.elapsedTimeMs) || frame.elapsedTimeMs < 0) { diagnostics.push(diagnostic("FRAME_TIME_INVALID", "error", location, "Each frame must provide a non-negative integer elapsedTimeMs value.")); continue; }
     if (frame.elapsedTimeMs <= previousElapsedTimeMs) diagnostics.push(diagnostic("FRAME_TIME_NOT_MONOTONE", "error", location, "Frame elapsedTimeMs must strictly increase.", { previousElapsedTimeMs, elapsedTimeMs: frame.elapsedTimeMs }));
     previousElapsedTimeMs = frame.elapsedTimeMs;
     if (manifest?.traceId !== undefined && frame.traceId !== manifest.traceId) diagnostics.push(diagnostic("FRAME_TRACE_ID_MISMATCH", "error", `${location}.traceId`, "Frame traceId must equal its manifest traceId.", { expected: manifest.traceId, actual: frame.traceId }));
@@ -141,7 +142,7 @@ function requireReference(owner, reference, expectedType, field, recordsByPath, 
 
 function findRawMedia(value, location, recordPath, diagnostics) {
   if (Array.isArray(value)) value.forEach((member, index) => findRawMedia(member, `${location}[${index}]`, recordPath, diagnostics));
-  else if (isPlainObject(value)) for (const [key, member] of Object.entries(value)) {
+  else if (isRecord(value)) for (const [key, member] of Object.entries(value)) {
     const normalized = key.replace(/[-_ ]/g, "").toLowerCase();
     const approvedAffirmation = (/^containsRaw(?:Image|Video|Audio)$/.test(key) && member === false) || (/^contains(?:SegmentationMask|AppearanceEmbedding)$/.test(key) && member === false) || (key === "rawMediaRetention" && member === "none");
     if (RAW_MEDIA_FIELD_NAMES.has(normalized) && !approvedAffirmation) diagnostics.push(diagnostic("RAW_MEDIA_REFUSED", "error", `${location}.${key}`, "Raw appearance-bearing media is not admitted to a practice bundle.", { recordPath, field: key }));
@@ -150,8 +151,8 @@ function findRawMedia(value, location, recordPath, diagnostics) {
 }
 
 function isBundlePath(value) { return typeof value === "string" && value.length > 0 && !value.startsWith("/") && !value.includes("\\") && value.split("/").every((segment) => segment !== "" && segment !== "." && segment !== ".."); }
-function isVersionedProfile(value) { return isPlainObject(value) && typeof value.id === "string" && value.id.length > 0 && typeof value.version === "string" && value.version.length > 0; }
+function isVersionedProfile(value) { return isRecord(value) && typeof value.id === "string" && value.id.length > 0 && typeof value.version === "string" && value.version.length > 0; }
 function isCoordinateProfile(value) { return isVersionedProfile(value) && (value.dimensions === 2 || value.dimensions === 3) && typeof value.normalization === "string" && value.normalization.length > 0; }
-const isPlainObject = isRecord;
+
 function diagnostic(code, severity, path, message, detail = {}) { return { code, severity, path, message, ...detail }; }
 function result(diagnostics) { const ordered = [...diagnostics].sort((left, right) => `${left.path}\u0000${left.code}`.localeCompare(`${right.path}\u0000${right.code}`)); return Object.freeze({ conformant: ordered.every((item) => item.severity !== "error"), diagnostics: Object.freeze(ordered.map(Object.freeze)) }); }
