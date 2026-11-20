@@ -1,6 +1,7 @@
+import { isRecord } from "@red-cup-engineering/signcell/values";
 /** Pure conformance over caller-supplied, parsed portable-practice records. */
 
-import { isObjectRecord } from "@red-cup-engineering/json-engine";
+
 
 export const RECORD_TYPES = Object.freeze({
   session: "tai-chi-practice-session",
@@ -151,6 +152,6 @@ function findRawMedia(value, location, recordPath, diagnostics) {
 function isBundlePath(value) { return typeof value === "string" && value.length > 0 && !value.startsWith("/") && !value.includes("\\") && value.split("/").every((segment) => segment !== "" && segment !== "." && segment !== ".."); }
 function isVersionedProfile(value) { return isPlainObject(value) && typeof value.id === "string" && value.id.length > 0 && typeof value.version === "string" && value.version.length > 0; }
 function isCoordinateProfile(value) { return isVersionedProfile(value) && (value.dimensions === 2 || value.dimensions === 3) && typeof value.normalization === "string" && value.normalization.length > 0; }
-const isPlainObject = isObjectRecord;
+const isPlainObject = isRecord;
 function diagnostic(code, severity, path, message, detail = {}) { return { code, severity, path, message, ...detail }; }
 function result(diagnostics) { const ordered = [...diagnostics].sort((left, right) => `${left.path}\u0000${left.code}`.localeCompare(`${right.path}\u0000${right.code}`)); return Object.freeze({ conformant: ordered.every((item) => item.severity !== "error"), diagnostics: Object.freeze(ordered.map(Object.freeze)) }); }
