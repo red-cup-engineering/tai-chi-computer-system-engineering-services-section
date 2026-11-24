@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:red-cup-science:tai-chi:skeletal-trace-manifest:1.0.0",
+  "title": "Tai Chi skeletal trace manifest v1",
+  "description": "Metadata for an NDJSON sequence of normalized skeletal observations. A trace is sensitive personal movement data, not a correctness assessment.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recordType", "schemaVersion", "traceId", "createdAt", "sensitivity", "mediaRetention", "provenance", "jointSetProfile", "coordinateSpaceProfile", "frames"],
+  "properties": {
+    "recordType": { "const": "tai-chi-skeletal-trace-manifest" },
+    "schemaVersion": { "const": "1.0.0" },
+    "traceId": { "$ref": "#/$defs/identifier" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "sensitivity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "shareAuthorization"],
+      "properties": {
+        "classification": { "const": "sensitive-personal-movement-data" },
+        "shareAuthorization": { "enum": ["local-only", "explicitly-authorized"] }
+      }
+    },
+    "mediaRetention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["containsRawImage", "containsRawVideo", "containsRawAudio", "containsSegmentationMask", "containsAppearanceEmbedding", "rawMediaRetention"],
+      "properties": {
+        "containsRawImage": { "const": false },
+        "containsRawVideo": { "const": false },
+        "containsRawAudio": { "const": false },
+        "containsSegmentationMask": { "const": false },
+        "containsAppearanceEmbedding": { "const": false },
+        "rawMediaRetention": { "const": "none" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["estimatorName", "estimatorVersion", "adapterVersion", "projectionVersion"],
+      "properties": {
+        "estimatorName": { "$ref": "#/$defs/nonEmptyString" },
+        "estimatorVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "adapterVersion": { "$ref": "#/$defs/nonEmptyString" },
+        "projectionVersion": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "jointSetProfile": { "$ref": "#/$defs/versionedProfile" },
+    "coordinateSpaceProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "dimensions", "normalization"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "dimensions": { "enum": [2, 3] },
+        "normalization": { "enum": ["image-normalized", "world-meters", "body-relative"] }
+      }
+    },
+    "frames": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "frameSchemaId", "path"],
+      "properties": {
+        "format": { "const": "ndjson" },
+        "frameSchemaId": { "const": "urn:red-cup-science:tai-chi:skeletal-trace-frame:1.0.0" },
+        "path": { "$ref": "#/$defs/admittedRelativePath" }
+      }
+    }
+  },
+  "$defs": {
+    "identifier": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$" },
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "admittedRelativePath": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9][A-Za-z0-9._/-]*$" },
+    "versionedProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    }
+  }
+}
